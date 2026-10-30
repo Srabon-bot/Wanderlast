@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wanderlast
 
-## Getting Started
+Wanderlast is a Next.js 16 App Router travel website with a separate Express/MongoDB API. The frontend currently includes the home page, add-destination form, and live destinations catalog.
 
-First, run the development server:
+## Project locations
+
+| Area | Location |
+| --- | --- |
+| Frontend | `D:\Projects\backnd\db-crud\wonderlust` |
+| Backend | `D:\Projects\backnd\db-crud\wonderlust-server` |
+| Destinations page | `src/app/destinations/all-destinations/page.tsx` |
+| Catalog component | `src/components/destinations-catalog.tsx` |
+| Shared navigation | `src/components/site-header.tsx` |
+
+## Requirements
+
+- Node.js with npm
+- MongoDB connection configured in `wonderlust-server/.env`
+- The backend running on port `8000` for live destination data
+
+## Run locally
+
+Start the backend in one terminal:
+
+```powershell
+cd D:\Projects\backnd\db-crud\wonderlust-server
+npm install
+npm run seed
+node index.js
+```
+
+Start the frontend in another terminal:
+
+```powershell
+cd D:\Projects\backnd\db-crud\wonderlust
+npm install
+npm run dev
+```
+
+Open:
+
+- Home: http://localhost:3000
+- All destinations: http://localhost:3000/destinations/all-destinations
+- Add destination: http://localhost:3000/destinations/new
+- API response: http://localhost:8000/alldestinations
+
+## Current features
+
+- Live destination cards loaded from `GET /alldestinations`.
+- Category, price-range, and sorting controls on the destinations page.
+- Responsive three-column desktop catalog that stacks on smaller screens.
+- Remote `next/image` support for Unsplash and the current Google image host.
+- Shared header active-link underline based on the current pathname.
+- Idempotent backend destination seeding with 12 realistic records.
+
+## Useful commands
+
+Frontend:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run build
+npm run start
+npm run lint
+npm run format
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Focused validation:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx biome check src/app/destinations/all-destinations/page.tsx src/components/destinations-catalog.tsx src/components/site-header.tsx next.config.ts
+npx tsc --noEmit
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Backend:
 
-## Learn More
+```bash
+npm run seed
+node index.js
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Notes for the next session
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The frontend fetch URL is currently hard-coded to `http://localhost:8000/alldestinations`.
+- The API currently returns 13 records because one manually added record exists in addition to the 12 seeded records.
+- Records without a `rating` use a visual fallback of `4.5`.
+- New remote image hosts must be added to `next.config.ts` under `images.remotePatterns`.
+- `AGENTS.md` contains the current implementation state and a short continuation checklist.
