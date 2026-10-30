@@ -1,16 +1,21 @@
+"use client";
+
 import { UserRound } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const navigation = [
-  { label: "Home", href: "/", active: true },
-  { label: "Destinations", href: "/destinations" },
+  { label: "Home", href: "/" },
+  { label: "Destinations", href: "/destinations/all-destinations" },
   { label: "Add Destination", href: "/destinations/new" },
   { label: "My Bookings", href: "/bookings" },
   { label: "Admin", href: "/admin" },
 ];
 
 export function SiteHeader() {
+  const pathname = usePathname();
+
   return (
     <header className="absolute inset-x-0 top-0 z-20 px-4 pt-4">
       <nav className="mx-auto grid flex-wrap items-center gap-x-8 gap-y-4 bg-white px-6 py-4 text-sm text-black shadow-sm sm:px-8 lg:grid-cols-[1fr_auto_1fr] lg:gap-10">
@@ -20,7 +25,8 @@ export function SiteHeader() {
               key={item.label}
               href={item.href}
               className={
-                item.active
+                pathname === item.href ||
+                (item.href !== "/" && pathname.startsWith(`${item.href}/`))
                   ? "text-[#159fc0] underline underline-offset-4"
                   : "transition-colors hover:text-[#159fc0]"
               }

@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const josefinSans = Josefin_Sans({
-  variable: "--font-geist-sans",
+  variable: "--font-josefin-sans",
   subsets: ["latin"],
 });
 
