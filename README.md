@@ -47,6 +47,7 @@ Open:
 ## Current features
 
 - Live destination cards loaded from `GET /alldestinations`.
+- Destination details loaded by slug from `GET /destinations/:slug`.
 - Category, price-range, and sorting controls on the destinations page.
 - Responsive three-column desktop catalog that stacks on smaller screens.
 - Remote `next/image` support for Unsplash and the current Google image host.
@@ -82,6 +83,7 @@ node index.js
 ## Notes for the next session
 
 - The frontend fetch URL is currently hard-coded to `http://localhost:8000/alldestinations`.
+- Destination detail URLs use the seeded `slug` values, for example `/destinations/bali-island-escape`.
 - The API currently returns 13 records because one manually added record exists in addition to the 12 seeded records.
 - Records without a `rating` use a visual fallback of `4.5`.
 - New remote image hosts must be added to `next.config.ts` under `images.remotePatterns`.
