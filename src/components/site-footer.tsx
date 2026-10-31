@@ -27,6 +27,7 @@ export function SiteFooter() {
               width={548}
               height={82}
               className="h-auto w-[280px] sm:w-[420px] lg:w-[548px]"
+              style={{ height: "auto" }}
             />
           </Link>
           <p className="mt-4 text-base text-white/70 sm:text-lg">

@@ -5,18 +5,49 @@ import {
   ArrowRight,
   CalendarDays,
   Check,
+  CircleAlert,
   MapPin,
   Pencil,
   Star,
   Trash2,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 import type { Destination } from "@/components/destinations-catalog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const defaultHighlights = [
   "Luxury accommodation",
@@ -35,12 +66,37 @@ export function DestinationDetails({
   const rating = destination.rating ?? 4.5;
   const price = destination.price ?? 0;
   const reviews = 234;
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [draft, setDraft] = React.useState(() => ({
+    destinationName: destination.destinationName,
+    country: destination.country,
+    category: destination.category,
+    price: destination.price?.toString() ?? "",
+    duration: destination.duration,
+    departureDate: destination.departureDate,
+    imageUrl: destination.imageUrl,
+    description: destination.description ?? "",
+  }));
+
+  function updateDraft(
+    field: keyof typeof draft,
+    value: (typeof draft)[keyof typeof draft],
+  ) {
+    setDraft((current) => ({ ...current, [field]: value }));
+  }
+
+  function handleEditSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setEditOpen(false);
+  }
 
   return (
     <main className="bg-white px-6 pb-20 pt-32 text-[#090909] sm:px-10 lg:px-20 lg:pb-24 lg:pt-36">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <Button
+            nativeButton={false}
             render={<Link href="/destinations/all-destinations" />}
             variant="ghost"
             className="h-auto justify-start px-0 text-lg font-normal text-[#6b6b6b] hover:bg-transparent hover:text-[#159fc0]"
@@ -52,26 +108,39 @@ export function DestinationDetails({
           <div className="flex gap-4">
             <Button
               type="button"
-              disabled
               variant="outline"
               size="lg"
               className="h-auto border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b]"
+              onClick={() => setEditOpen(true)}
             >
               <Pencil className="size-5" strokeWidth={1.7} />
               Edit
             </Button>
             <Button
               type="button"
-              disabled
               variant="outline"
               size="lg"
               className="h-auto border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
+              onClick={() => setDeleteOpen(true)}
             >
               <Trash2 className="size-5" strokeWidth={1.7} />
               Cancel
             </Button>
           </div>
         </div>
+
+        <EditDestinationDialog
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          draft={draft}
+          onDraftChange={updateDraft}
+          onSubmit={handleEditSubmit}
+        />
+        <DeleteDestinationDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          destinationName={destination.destinationName}
+        />
 
         <div className="relative mt-8 aspect-[1.9] overflow-hidden bg-[#e8eeee]">
           <Image
@@ -127,6 +196,264 @@ export function DestinationDetails({
         </div>
       </div>
     </main>
+  );
+}
+
+type DestinationDraft = {
+  destinationName: string;
+  country: string;
+  category: string;
+  price: string;
+  duration: string;
+  departureDate: string;
+  imageUrl: string;
+  description: string;
+};
+
+function EditDestinationDialog({
+  open,
+  onOpenChange,
+  draft,
+  onDraftChange,
+  onSubmit,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  draft: DestinationDraft;
+  onDraftChange: (field: keyof DestinationDraft, value: string) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+}) {
+  const fieldClassName =
+    "h-12 rounded-none border-[#e5e7eb] bg-[#f8f9fa] px-4 text-base text-[#6b6b6b] placeholder:text-[#777] focus-visible:border-[#18a4c4] focus-visible:ring-[#18a4c4]";
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent
+        showCloseButton
+        className="!max-w-[800px] max-h-[calc(100vh-12px)] w-[calc(100%-12px)] overflow-y-auto rounded-none border border-[#ededed] bg-white p-0 text-[#090909] shadow-[0_2px_8px_rgba(0,0,0,0.12)]"
+      >
+        <form onSubmit={onSubmit} className="p-8 sm:p-10">
+          <DialogHeader className="gap-2">
+            <DialogTitle className="text-3xl font-light tracking-[-0.05em]">
+              Update Travel Package
+            </DialogTitle>
+            <DialogDescription className="text-base text-[#6b6b6b]">
+              Make changes to the travel package details below
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-8 space-y-5">
+            <Field label="Destination Name" htmlFor="edit-destination-name">
+              <Input
+                id="edit-destination-name"
+                value={draft.destinationName}
+                onChange={(event) =>
+                  onDraftChange("destinationName", event.target.value)
+                }
+                className={fieldClassName}
+              />
+            </Field>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label="Country" htmlFor="edit-country">
+                <Input
+                  id="edit-country"
+                  value={draft.country}
+                  onChange={(event) =>
+                    onDraftChange("country", event.target.value)
+                  }
+                  className={fieldClassName}
+                />
+              </Field>
+              <Field label="Category" htmlFor="edit-category">
+                <Select
+                  value={draft.category}
+                  onValueChange={(value) =>
+                    onDraftChange("category", value ?? draft.category)
+                  }
+                >
+                  <SelectTrigger
+                    id="edit-category"
+                    className={`${fieldClassName} w-full`}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Beach">Beach</SelectItem>
+                    <SelectItem value="Mountain">Mountain</SelectItem>
+                    <SelectItem value="City">City</SelectItem>
+                    <SelectItem value="Adventure">Adventure</SelectItem>
+                  </SelectContent>
+                </Select>
+              </Field>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <Field label="Price (USD)" htmlFor="edit-price">
+                <Input
+                  id="edit-price"
+                  type="number"
+                  placeholder="e.g., 1299"
+                  value={draft.price}
+                  onChange={(event) =>
+                    onDraftChange("price", event.target.value)
+                  }
+                  className={fieldClassName}
+                />
+              </Field>
+              <Field label="Duration" htmlFor="edit-duration">
+                <Input
+                  id="edit-duration"
+                  placeholder="e.g., 7 Days/6 Nights"
+                  value={draft.duration}
+                  onChange={(event) =>
+                    onDraftChange("duration", event.target.value)
+                  }
+                  className={fieldClassName}
+                />
+              </Field>
+            </div>
+
+            <Field label="Departure Date" htmlFor="edit-departure-date">
+              <Input
+                id="edit-departure-date"
+                type="date"
+                value={draft.departureDate}
+                onChange={(event) =>
+                  onDraftChange("departureDate", event.target.value)
+                }
+                className={fieldClassName}
+              />
+            </Field>
+
+            <Field label="Image URL" htmlFor="edit-image-url">
+              <Input
+                id="edit-image-url"
+                type="url"
+                placeholder="https://example.com/image.jpg"
+                value={draft.imageUrl}
+                onChange={(event) =>
+                  onDraftChange("imageUrl", event.target.value)
+                }
+                className={fieldClassName}
+              />
+            </Field>
+
+            <Field label="Description" htmlFor="edit-description">
+              <Textarea
+                id="edit-description"
+                placeholder="Describe the travel experience..."
+                value={draft.description}
+                onChange={(event) =>
+                  onDraftChange("description", event.target.value)
+                }
+                className="min-h-36 resize-y rounded-none border-[#e5e7eb] bg-[#f8f9fa] px-4 py-4 text-base text-[#6b6b6b] placeholder:text-[#777] focus-visible:border-[#18a4c4] focus-visible:ring-[#18a4c4]"
+              />
+            </Field>
+          </div>
+
+          <DialogFooter className="mt-8 flex-row justify-end gap-4 border-0 bg-transparent p-0">
+            <DialogClose
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-14 rounded-none border-red-500 px-7 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
+                />
+              }
+            >
+              Cancel
+            </DialogClose>
+            <Button
+              type="submit"
+              className="h-14 rounded-none bg-[#18a4c4] px-7 text-base font-normal hover:bg-[#118dab]"
+            >
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DeleteDestinationDialog({
+  open,
+  onOpenChange,
+  destinationName,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  destinationName: string;
+}) {
+  return (
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogContent
+        size="default"
+        className="!max-w-[600px] w-[calc(100%-24px)] rounded-none border border-[#ededed] bg-white p-8 text-[#090909] shadow-[0_2px_8px_rgba(0,0,0,0.12)] sm:p-10"
+      >
+        <AlertDialogCancel
+          variant="ghost"
+          size="icon-sm"
+          aria-label="Close delete dialog"
+          className="absolute right-3 top-3 rounded-none text-[#b3b3b3] hover:bg-transparent hover:text-[#777]"
+        >
+          <X className="size-6" strokeWidth={1.5} />
+        </AlertDialogCancel>
+        <AlertDialogHeader className="grid-cols-[auto_1fr] gap-x-4 text-left">
+          <AlertDialogMedia className="row-span-2 size-14 rounded-full bg-[#fceeee] text-red-500">
+            <CircleAlert className="size-7" strokeWidth={1.8} />
+          </AlertDialogMedia>
+          <AlertDialogTitle className="self-center text-2xl font-light">
+            Delete Travel Package
+          </AlertDialogTitle>
+          <AlertDialogDescription className="col-start-2 text-base leading-relaxed text-[#6b6b6b]">
+            Are you sure you want to delete{" "}
+            <strong className="text-[#090909]">"{destinationName}"</strong>?
+            This action cannot be undone and will permanently remove this travel
+            package from the system.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter className="mt-6 flex-row justify-end gap-4 border-0 bg-transparent p-0">
+          <AlertDialogCancel
+            size="lg"
+            className="h-14 rounded-none px-7 text-base font-normal"
+          >
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            type="button"
+            variant="destructive"
+            size="lg"
+            className="h-14 rounded-none bg-[#f04444] px-7 text-base text-white hover:bg-[#d93636]"
+            onClick={() => onOpenChange(false)}
+          >
+            <Trash2 className="size-5" />
+            Delete Package
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+function Field({
+  label,
+  htmlFor,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <Label htmlFor={htmlFor} className="mb-2 text-base font-medium">
+        {label}
+      </Label>
+      {children}
+    </div>
   );
 }
 
