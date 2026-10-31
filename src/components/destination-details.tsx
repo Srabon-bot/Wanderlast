@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import type { Destination } from "@/components/destinations-catalog";
 import {
@@ -63,20 +64,27 @@ export function DestinationDetails({
   destination: Destination;
 }) {
   const highlights = defaultHighlights;
-  const rating = destination.rating ?? 4.5;
-  const price = destination.price ?? 0;
+  const router = useRouter();
+  const [currentDestination, setCurrentDestination] =
+    React.useState(destination);
+  const rating = currentDestination.rating ?? 4.5;
+  const price = currentDestination.price ?? 0;
   const reviews = 234;
   const [editOpen, setEditOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [editError, setEditError] = React.useState("");
+  const [isDeleting, setIsDeleting] = React.useState(false);
+  const [deleteError, setDeleteError] = React.useState("");
   const [draft, setDraft] = React.useState(() => ({
-    destinationName: destination.destinationName,
-    country: destination.country,
-    category: destination.category,
-    price: destination.price?.toString() ?? "",
-    duration: destination.duration,
-    departureDate: destination.departureDate,
-    imageUrl: destination.imageUrl,
-    description: destination.description ?? "",
+    destinationName: currentDestination.destinationName,
+    country: currentDestination.country,
+    category: currentDestination.category,
+    price: currentDestination.price?.toString() ?? "",
+    duration: currentDestination.duration,
+    departureDate: currentDestination.departureDate,
+    imageUrl: currentDestination.imageUrl,
+    description: currentDestination.description ?? "",
   }));
 
   function updateDraft(
@@ -86,9 +94,123 @@ export function DestinationDetails({
     setDraft((current) => ({ ...current, [field]: value }));
   }
 
-  function handleEditSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function openEditDialog() {
+    setDraft({
+      destinationName: currentDestination.destinationName,
+      country: currentDestination.country,
+      category: currentDestination.category,
+      price: currentDestination.price?.toString() ?? "",
+      duration: currentDestination.duration,
+      departureDate: currentDestination.departureDate,
+      imageUrl: currentDestination.imageUrl,
+      description: currentDestination.description ?? "",
+    });
+    setEditError("");
+    setEditOpen(true);
+  }
+
+  async function handleEditSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setEditOpen(false);
+
+    const id = getDestinationId(currentDestination);
+    if (!id) {
+      setEditError("This destination is missing its database ID.");
+      return;
+    }
+
+    setIsSaving(true);
+    setEditError("");
+
+    try {
+      const payload = {
+        destinationName: draft.destinationName.trim(),
+        country: draft.country.trim(),
+        category: draft.category,
+        price: draft.price.trim() ? Number(draft.price) : null,
+        duration: draft.duration.trim(),
+        departureDate: draft.departureDate,
+        imageUrl: draft.imageUrl.trim(),
+        description: draft.description.trim(),
+      };
+      const response = await fetch(
+        `http://localhost:8000/alldestinations/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(
+          result?.message ?? `Destination update failed (${response.status}).`,
+        );
+      }
+
+      setCurrentDestination((current) => ({ ...current, ...payload }));
+      setEditOpen(false);
+    } catch (error) {
+      setEditError(
+        error instanceof Error
+          ? error.message
+          : "Unable to update this destination.",
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  function openDeleteDialog() {
+    setDeleteError("");
+    setDeleteOpen(true);
+  }
+
+  async function handleDelete() {
+    const id = getDestinationId(currentDestination);
+    if (!id) {
+      setDeleteError("This destination is missing its database ID.");
+      return;
+    }
+
+    setIsDeleting(true);
+    setDeleteError("");
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/alldestinations/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+          },
+        },
+      );
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(
+          result?.message ??
+            `Destination deletion failed (${response.status}).`,
+        );
+      }
+
+      router.push("/destinations/all-destinations");
+    } catch (error) {
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "Unable to delete this destination.",
+      );
+      setIsDeleting(false);
+    }
   }
 
   return (
@@ -111,7 +233,7 @@ export function DestinationDetails({
               variant="outline"
               size="lg"
               className="h-auto border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b]"
-              onClick={() => setEditOpen(true)}
+              onClick={openEditDialog}
             >
               <Pencil className="size-5" strokeWidth={1.7} />
               Edit
@@ -121,10 +243,10 @@ export function DestinationDetails({
               variant="outline"
               size="lg"
               className="h-auto border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
-              onClick={() => setDeleteOpen(true)}
+              onClick={openDeleteDialog}
             >
               <Trash2 className="size-5" strokeWidth={1.7} />
-              Cancel
+              Delete
             </Button>
           </div>
         </div>
@@ -135,17 +257,22 @@ export function DestinationDetails({
           draft={draft}
           onDraftChange={updateDraft}
           onSubmit={handleEditSubmit}
+          isSaving={isSaving}
+          error={editError}
         />
         <DeleteDestinationDialog
           open={deleteOpen}
           onOpenChange={setDeleteOpen}
-          destinationName={destination.destinationName}
+          destinationName={currentDestination.destinationName}
+          isDeleting={isDeleting}
+          error={deleteError}
+          onDelete={handleDelete}
         />
 
         <div className="relative mt-8 aspect-[1.9] overflow-hidden bg-[#e8eeee]">
           <Image
-            src={destination.imageUrl}
-            alt={`${destination.destinationName} in ${destination.country}`}
+            src={currentDestination.imageUrl}
+            alt={`${currentDestination.destinationName} in ${currentDestination.country}`}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 1200px"
@@ -157,10 +284,10 @@ export function DestinationDetails({
           <div>
             <p className="flex items-center gap-2 text-lg text-[#6b6b6b]">
               <MapPin className="size-5" strokeWidth={1.7} />
-              {destination.country}
+              {currentDestination.country}
             </p>
             <h1 className="mt-4 text-5xl font-light tracking-[-0.06em] sm:text-6xl">
-              {destination.destinationName}
+              {currentDestination.destinationName}
             </h1>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3 text-lg">
@@ -171,16 +298,22 @@ export function DestinationDetails({
               </span>
               <span className="inline-flex items-center gap-2">
                 <CalendarDays className="size-5 text-[#6b6b6b]" />
-                {destination.duration}
+                {currentDestination.duration}
               </span>
             </div>
 
             <DetailSection title="Overview">
-              <p>{destination.description ?? defaultOverview(destination)}</p>
+              <p>
+                {currentDestination.description ??
+                  defaultOverview(currentDestination)}
+              </p>
             </DetailSection>
 
             <DetailSection title="Highlights">
-              <p>{destination.description ?? defaultOverview(destination)}</p>
+              <p>
+                {currentDestination.description ??
+                  defaultOverview(currentDestination)}
+              </p>
               <ul className="mt-6 grid gap-4 text-[#6b6b6b] sm:grid-cols-2">
                 {highlights.map((highlight) => (
                   <li key={highlight} className="flex items-start gap-3">
@@ -192,7 +325,7 @@ export function DestinationDetails({
             </DetailSection>
           </div>
 
-          <BookingCard destination={destination} price={price} />
+          <BookingCard destination={currentDestination} price={price} />
         </div>
       </div>
     </main>
@@ -216,12 +349,16 @@ function EditDestinationDialog({
   draft,
   onDraftChange,
   onSubmit,
+  isSaving,
+  error,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   draft: DestinationDraft;
   onDraftChange: (field: keyof DestinationDraft, value: string) => void;
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+  isSaving: boolean;
+  error: string;
 }) {
   const fieldClassName =
     "h-12 rounded-none border-[#e5e7eb] bg-[#f8f9fa] px-4 text-base text-[#6b6b6b] placeholder:text-[#777] focus-visible:border-[#18a4c4] focus-visible:ring-[#18a4c4]";
@@ -240,6 +377,11 @@ function EditDestinationDialog({
             <DialogDescription className="text-base text-[#6b6b6b]">
               Make changes to the travel package details below
             </DialogDescription>
+            {error ? (
+              <p className="text-sm text-red-600" role="alert">
+                {error}
+              </p>
+            ) : null}
           </DialogHeader>
 
           <div className="mt-8 space-y-5">
@@ -357,6 +499,7 @@ function EditDestinationDialog({
               render={
                 <Button
                   type="button"
+                  disabled={isSaving}
                   variant="outline"
                   className="h-14 rounded-none border-red-500 px-7 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
                 />
@@ -366,9 +509,10 @@ function EditDestinationDialog({
             </DialogClose>
             <Button
               type="submit"
+              disabled={isSaving}
               className="h-14 rounded-none bg-[#18a4c4] px-7 text-base font-normal hover:bg-[#118dab]"
             >
-              Save Changes
+              {isSaving ? "Saving..." : "Save Changes"}
             </Button>
           </DialogFooter>
         </form>
@@ -381,10 +525,16 @@ function DeleteDestinationDialog({
   open,
   onOpenChange,
   destinationName,
+  isDeleting,
+  error,
+  onDelete,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   destinationName: string;
+  isDeleting: boolean;
+  error: string;
+  onDelete: () => void | Promise<void>;
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
@@ -413,6 +563,11 @@ function DeleteDestinationDialog({
             This action cannot be undone and will permanently remove this travel
             package from the system.
           </AlertDialogDescription>
+          {error ? (
+            <p className="col-start-2 text-sm text-red-600" role="alert">
+              {error}
+            </p>
+          ) : null}
         </AlertDialogHeader>
 
         <AlertDialogFooter className="mt-6 flex-row justify-end gap-4 border-0 bg-transparent p-0">
@@ -424,13 +579,14 @@ function DeleteDestinationDialog({
           </AlertDialogCancel>
           <AlertDialogAction
             type="button"
+            disabled={isDeleting}
             variant="destructive"
             size="lg"
             className="h-14 rounded-none bg-[#f04444] px-7 text-base text-white hover:bg-[#d93636]"
-            onClick={() => onOpenChange(false)}
+            onClick={onDelete}
           >
             <Trash2 className="size-5" />
-            Delete Package
+            {isDeleting ? "Deleting..." : "Delete Package"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -455,6 +611,14 @@ function Field({
       {children}
     </div>
   );
+}
+
+function getDestinationId(destination: Destination) {
+  if (typeof destination._id === "string") {
+    return destination._id;
+  }
+
+  return destination._id?.$oid ?? destination.id ?? null;
 }
 
 function DetailSection({

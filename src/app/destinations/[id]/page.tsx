@@ -4,16 +4,19 @@ import type { Destination } from "@/components/destinations-catalog";
 
 export const dynamic = "force-dynamic";
 
-async function getDestination(slug: string): Promise<Destination | null> {
-  const response = await fetch(
-    `http://localhost:8000/destinations/${encodeURIComponent(slug)}`,
-    {
-      headers: {
-        Accept: "application/json",
-      },
-      cache: "no-store",
+const objectIdPattern = /^[a-f\d]{24}$/i;
+
+async function getDestination(identifier: string): Promise<Destination | null> {
+  const endpoint = objectIdPattern.test(identifier)
+    ? `/alldestinations/${encodeURIComponent(identifier)}`
+    : `/destinations/${encodeURIComponent(identifier)}`;
+
+  const response = await fetch(`http://localhost:8000${endpoint}`, {
+    headers: {
+      Accept: "application/json",
     },
-  );
+    cache: "no-store",
+  });
 
   if (response.status === 404) {
     return null;
