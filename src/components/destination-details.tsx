@@ -14,6 +14,9 @@ import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 import type { Destination } from "@/components/destinations-catalog";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 const defaultHighlights = [
   "Luxury accommodation",
@@ -37,31 +40,36 @@ export function DestinationDetails({
     <main className="bg-white px-6 pb-20 pt-32 text-[#090909] sm:px-10 lg:px-20 lg:pb-24 lg:pt-36">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            href="/destinations/all-destinations"
-            className="inline-flex items-center gap-3 text-lg text-[#6b6b6b] transition-colors hover:text-[#159fc0]"
+          <Button
+            render={<Link href="/destinations/all-destinations" />}
+            variant="ghost"
+            className="h-auto justify-start px-0 text-lg font-normal text-[#6b6b6b] hover:bg-transparent hover:text-[#159fc0]"
           >
             <ArrowLeft className="size-5" strokeWidth={1.6} />
             Back to Destinations
-          </Link>
+          </Button>
 
           <div className="flex gap-4">
-            <button
+            <Button
               type="button"
               disabled
-              className="inline-flex items-center gap-3 border border-[#bdbdbd] px-6 py-3 text-base text-[#6b6b6b] disabled:cursor-not-allowed disabled:opacity-70"
+              variant="outline"
+              size="lg"
+              className="h-auto border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b]"
             >
               <Pencil className="size-5" strokeWidth={1.7} />
               Edit
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               disabled
-              className="inline-flex items-center gap-3 border border-red-400 px-6 py-3 text-base text-red-500 disabled:cursor-not-allowed disabled:opacity-70"
+              variant="outline"
+              size="lg"
+              className="h-auto border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
             >
               <Trash2 className="size-5" strokeWidth={1.7} />
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -157,7 +165,7 @@ function BookingCard({
   }
 
   return (
-    <aside className="h-fit border border-[#e4e4e4] p-5 shadow-[0_3px_10px_rgba(0,0,0,0.12)] lg:sticky lg:top-32">
+    <Card className="h-fit rounded-none border-[#e4e4e4] p-5 shadow-[0_3px_10px_rgba(0,0,0,0.12)] lg:sticky lg:top-32">
       <p className="text-lg text-[#6b6b6b]">Starting from</p>
       <p className="mt-1 text-4xl text-[#159fc0]">${price.toLocaleString()}</p>
       <p className="mt-1 text-base text-[#6b6b6b]">per person</p>
@@ -166,7 +174,7 @@ function BookingCard({
         <label htmlFor="departure-date" className="sr-only">
           Departure date
         </label>
-        <input
+        <Input
           id="departure-date"
           type="date"
           value={departureDate}
@@ -174,16 +182,17 @@ function BookingCard({
             setDepartureDate(event.target.value);
             setMessage("");
           }}
-          className="w-full border border-[#e5e5e5] bg-[#fafafa] px-4 py-4 text-lg outline-none focus:border-[#159fc0]"
+          className="h-auto rounded-none border-[#e5e5e5] bg-[#fafafa] px-4 py-4 text-lg focus-visible:border-[#159fc0] focus-visible:ring-0"
           required
         />
-        <button
+        <Button
           type="submit"
-          className="mt-6 flex w-full items-center justify-center gap-3 bg-[#1ea4c3] px-5 py-4 text-lg text-white transition-colors hover:bg-[#148da9]"
+          size="lg"
+          className="mt-6 h-auto w-full rounded-none bg-[#1ea4c3] px-5 py-4 text-lg text-white hover:bg-[#148da9]"
         >
           Book Now
           <ArrowRight className="size-5" />
-        </button>
+        </Button>
         {message ? (
           <output
             className="mt-3 block text-sm text-green-700"
@@ -208,7 +217,7 @@ function BookingCard({
           24/7 customer support
         </li>
       </ul>
-    </aside>
+    </Card>
   );
 }
 
