@@ -10,8 +10,8 @@ const josefinSans = Josefin_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Wanderlast | Discover Your Next Adventure",
-  description: "Explore breathtaking destinations with Wanderlast.",
+  title: "Wonderlast | Discover Your Next Adventure",
+  description: "Explore breathtaking destinations with Wonderlast.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -8,7 +8,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-## Wanderlast project guidance
+## Wonderlast project guidance
 
 - This repository is becoming a MERN CRUD travel site. Build the frontend first with Next.js, TypeScript, shadcn/Base UI, and Tailwind CSS v4; Better Auth and backend CRUD integration are planned for later slices.
 - Keep shared navigation in the root layout so every route can reuse it. Keep page-specific sections in reusable components under `src/components`.

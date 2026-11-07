@@ -21,13 +21,13 @@ const benefits = [
   },
 ];
 
-export function WhyChooseWanderlust() {
+export function WhyChooseWonderlast() {
   return (
     <section className="bg-[#effcff] px-6 py-24 text-[#090909] sm:px-10 lg:px-20 lg:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
           <h2 className="text-4xl font-light tracking-[-0.06em] sm:text-5xl lg:text-6xl">
-            Why Choose Wanderlust
+            Why Choose Wonderlast
           </h2>
           <p className="mt-4 text-base text-[#6e6e6e] sm:text-lg">
             Your trusted partner for exceptional travel experiences

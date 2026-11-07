@@ -1,12 +1,12 @@
 import { HomeCta } from "@/components/home-cta";
 import { HomeHero } from "@/components/home-hero";
-import { WhyChooseWanderlust } from "@/components/why-choose-wanderlust";
+import { WhyChooseWonderlast } from "@/components/why-choose-wonderlast";
 
 export default function Home() {
   return (
     <>
       <HomeHero />
-      <WhyChooseWanderlust />
+      <WhyChooseWonderlast />
       <HomeCta />
     </>
   );

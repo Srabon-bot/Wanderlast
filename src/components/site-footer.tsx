@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 const quickLinks = [
@@ -20,15 +19,10 @@ export function SiteFooter() {
     <footer className="bg-[#0d0b0c] px-6 py-16 text-white sm:px-10 lg:px-20 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <div>
-          <Link href="/" aria-label="Wanderlast home">
-            <Image
-              src="/assets/Wanderlast-1.png"
-              alt="Wanderlast"
-              width={548}
-              height={82}
-              className="h-auto w-[280px] sm:w-[420px] lg:w-[548px]"
-              style={{ height: "auto" }}
-            />
+          <Link href="/" aria-label="Wonderlast home">
+            <span className="text-6xl font-semibold leading-none tracking-[-0.06em] text-white sm:text-7xl lg:text-[6.5rem]">
+              Wonderlast
+            </span>
           </Link>
           <p className="mt-4 text-base text-white/70 sm:text-lg">
             Your gateway to extraordinary travel experiences around the world.
@@ -79,7 +73,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-5 text-sm text-white/70 sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 Wanderlust. All rights reserved.</p>
+          <p>© 2026 Wonderlast. All rights reserved.</p>
           <div className="flex items-center gap-6 text-white">
             <a
               href="https://x.com"

@@ -62,7 +62,7 @@ export default async function AllDestinations() {
             <h2 className="text-2xl">Destinations are unavailable</h2>
             <p className="mt-2">{message}</p>
             <p className="mt-4 text-sm">
-              Make sure the Wonderlust server is running on port 8000 and try
+              Make sure the Wonderlast server is running on port 8000 and try
               again.
             </p>
           </div>

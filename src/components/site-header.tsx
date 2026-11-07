@@ -1,12 +1,9 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
 import { UserRound } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {
   Popover,
   PopoverContent,
@@ -15,6 +12,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { authClient } from "@/lib/auth-client";
 import { Button } from "./ui/button";
 
 const navigation = [
@@ -61,18 +59,12 @@ export function SiteHeader() {
 
         <Link
           href="/"
-          className="order-1 mx-auto lg:order-2"
-          aria-label="Wanderlast home"
+          className="order-1 mx-auto leading-none lg:order-2"
+          aria-label="Wonderlast home"
         >
-          <Image
-            src="/assets/Wanderlast.png"
-            alt="Wanderlast"
-            width={172}
-            height={38}
-            priority
-            className="h-auto w-[150px] sm:w-[172px]"
-            style={{ height: "auto" }}
-          />
+          <span className="text-3xl font-semibold tracking-[-0.05em] text-[#18a4c4] sm:text-4xl">
+            Wonderlast
+          </span>
         </Link>
 
         <div className="order-3 flex w-full items-center justify-center gap-6 lg:w-auto lg:justify-end lg:gap-8">

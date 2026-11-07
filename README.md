@@ -1,6 +1,6 @@
-# Wanderlast
+# Wonderlast
 
-Wanderlast is a Next.js 16 App Router travel website with a separate Express/MongoDB API. The frontend currently includes the home page, add-destination form, and live destinations catalog.
+Wonderlast is a Next.js 16 App Router travel website with a separate Express/MongoDB API. The frontend currently includes the home page, add-destination form, and live destinations catalog.
 
 ## Project locations
 
