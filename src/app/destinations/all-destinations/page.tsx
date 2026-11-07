@@ -1,10 +1,11 @@
 import type { Destination } from "@/components/destinations-catalog";
 import { DestinationsCatalog } from "@/components/destinations-catalog";
+import { apiUrl } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
 async function getDestinations(): Promise<Destination[]> {
-  const response = await fetch("http://localhost:8000/alldestinations", {
+  const response = await fetch(apiUrl("/alldestinations"), {
     headers: {
       Accept: "application/json",
     },

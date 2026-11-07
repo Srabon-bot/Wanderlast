@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { apiUrl } from "@/lib/api";
 
 const inputClassName =
   "h-12 rounded-none border-[#e5e7eb] bg-[#f8f9fa] px-4 text-base text-[#6b6b6b] placeholder:text-[#777] focus-visible:border-[#18a4c4] focus-visible:ring-[#18a4c4]";
@@ -56,7 +57,7 @@ export function AddDestinationForm({ onSubmit }: AddDestinationFormProps) {
     onSubmit?.(data);
     console.log("Destination form data:", data);
 
-    const response = await fetch("http://localhost:8000/add-destination", {
+    const response = await fetch(apiUrl("/add-destination"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -49,6 +49,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { apiUrl } from "@/lib/api";
 import { authClient } from "@/lib/auth-client";
 
 const defaultHighlights = [
@@ -133,17 +134,14 @@ export function DestinationDetails({
         imageUrl: draft.imageUrl.trim(),
         description: draft.description.trim(),
       };
-      const response = await fetch(
-        `http://localhost:8000/alldestinations/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
+      const response = await fetch(apiUrl(`/alldestinations/${id}`), {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify(payload),
+      });
 
       if (!response.ok) {
         const result = (await response.json().catch(() => null)) as {
@@ -183,15 +181,12 @@ export function DestinationDetails({
     setDeleteError("");
 
     try {
-      const response = await fetch(
-        `http://localhost:8000/alldestinations/${id}`,
-        {
-          method: "DELETE",
-          headers: {
-            Accept: "application/json",
-          },
+      const response = await fetch(apiUrl(`/alldestinations/${id}`), {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
         },
-      );
+      });
 
       if (!response.ok) {
         const result = (await response.json().catch(() => null)) as {
@@ -675,7 +670,7 @@ function BookingCard({
     };
 
     try {
-      const response = await fetch("http://localhost:8000/bookings", {
+      const response = await fetch(apiUrl("/bookings"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

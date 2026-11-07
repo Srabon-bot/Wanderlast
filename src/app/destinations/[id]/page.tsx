@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { DestinationDetails } from "@/components/destination-details";
 import type { Destination } from "@/components/destinations-catalog";
+import { apiUrl } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ async function getDestination(identifier: string): Promise<Destination | null> {
     ? `/alldestinations/${encodeURIComponent(identifier)}`
     : `/destinations/${encodeURIComponent(identifier)}`;
 
-  const response = await fetch(`http://localhost:8000${endpoint}`, {
+  const response = await fetch(apiUrl(endpoint), {
     headers: {
       Accept: "application/json",
     },

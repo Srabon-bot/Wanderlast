@@ -1,5 +1,7 @@
-export const BOOKINGS_API = "http://localhost:8000/myBookings";
-export const CANCEL_BOOKING_API = "http://localhost:8000/bookings";
+import { apiUrl } from "@/lib/api";
+
+export const BOOKINGS_API = apiUrl("/myBookings");
+export const CANCEL_BOOKING_API = apiUrl("/bookings");
 
 export type ObjectId = string | { $oid?: string };
 

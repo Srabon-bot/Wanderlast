@@ -19,7 +19,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Current implementation state
 
 - The frontend is a Next.js 16 App Router application under `src/app`.
-- `/destinations/all-destinations` fetches live records from `http://localhost:8000/alldestinations` and renders the client catalog in `src/components/destinations-catalog.tsx`.
+- `/destinations/all-destinations` fetches live records from the API base URL configured by `NEXT_PUBLIC_API_URL` (defaults to `http://localhost:8000`) and renders the client catalog in `src/components/destinations-catalog.tsx`.
 - The destinations catalog has functional category, price-range, and sort controls. It renders all API records, uses a `4.5` rating fallback when a record has no rating, and shows an explicit API error state.
 - `next.config.ts` allows remote images from `images.unsplash.com` and `encrypted-tbn0.gstatic.com`.
 - `src/components/site-header.tsx` is a Client Component and uses `usePathname()` so the active underline follows the current route, including nested routes.
