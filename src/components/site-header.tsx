@@ -21,7 +21,7 @@ const navigation = [
   { label: "Home", href: "/" },
   { label: "Destinations", href: "/destinations/all-destinations" },
   { label: "Add Destination", href: "/destinations/new" },
-  { label: "My Bookings", href: "/bookings" },
+  { label: "My Bookings", href: "/myBookings" },
   { label: "Admin", href: "/admin" },
 ];
 
