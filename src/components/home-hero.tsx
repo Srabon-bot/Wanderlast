@@ -11,7 +11,7 @@ const searchFields = [
 
 export function HomeHero() {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden bg-[#102e32] text-white">
+    <section className="relative flex min-h-screen flex-col overflow-hidden bg-[#102e32] text-white">
       <Image
         src="/assets/Banner.png"
         alt="A tropical coastal destination"
@@ -22,48 +22,54 @@ export function HomeHero() {
       />
       <div className="absolute inset-0 bg-black/35" />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 pb-36 pt-48 text-center sm:px-10 lg:pb-40">
-        <h1 className="max-w-3xl text-5xl font-light leading-[0.98] tracking-[-0.06em] sm:text-7xl lg:text-8xl">
-          Discover Your
-          <br />
-          Next Adventure
-        </h1>
-        <p className="mt-8 max-w-2xl text-base leading-7 text-white/90 sm:text-lg">
-          Explore breathtaking destinations and create unforgettable memories
-          with
-          <br className="hidden sm:block" /> our curated travel experiences.
-        </p>
+      <div className="relative z-10 flex flex-1 items-center justify-center px-5 pb-12 pt-36 sm:px-10 sm:pb-20 sm:pt-44 lg:pb-24">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center text-center">
+          <h1 className="max-w-3xl text-4xl font-light leading-[0.98] tracking-[-0.06em] sm:text-6xl lg:text-8xl">
+            Discover Your
+            <br />
+            Next Adventure
+          </h1>
+          <p className="mt-6 max-w-2xl text-sm leading-6 text-white/90 sm:mt-8 sm:text-lg sm:leading-7">
+            Explore breathtaking destinations and create unforgettable memories
+            with
+            <br className="hidden sm:block" /> our curated travel experiences.
+          </p>
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <Link
-            href="/destinations"
-            className="inline-flex h-14 items-center justify-center gap-8 bg-[#18a4c4] px-7 text-sm font-medium uppercase transition-colors hover:bg-[#118dab]"
-          >
-            Explore Now
-            <ArrowRight className="size-5" />
-          </Link>
-          <Link
-            href="/destinations"
-            className="inline-flex h-14 items-center justify-center border border-white/60 bg-white/15 px-7 text-sm font-medium uppercase backdrop-blur-sm transition-colors hover:bg-white/25"
-          >
-            View Destination
-          </Link>
+          <div className="mt-8 flex w-full max-w-sm flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:justify-center">
+            <Link
+              href="/destinations/all-destinations"
+              className="inline-flex h-12 w-full items-center justify-center gap-6 bg-[#18a4c4] px-7 text-sm font-medium uppercase transition-colors hover:bg-[#118dab] sm:h-14 sm:w-auto sm:gap-8"
+            >
+              Explore Now
+              <ArrowRight className="size-5" />
+            </Link>
+            <Link
+              href="/destinations/all-destinations"
+              className="inline-flex h-12 w-full items-center justify-center border border-white/60 bg-white/15 px-7 text-sm font-medium uppercase backdrop-blur-sm transition-colors hover:bg-white/25 sm:h-14 sm:w-auto"
+            >
+              View Destination
+            </Link>
+          </div>
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col bg-white/20 backdrop-blur-sm sm:flex-row">
+      <div className="relative z-10 grid grid-cols-2 border-t border-white/30 bg-white/20 backdrop-blur-sm sm:flex">
         {searchFields.map((field) => (
           <div
             key={field.label}
-            className="flex min-h-20 flex-1 flex-col justify-center border-b border-white/30 px-6 py-3 last:border-b-0 sm:border-b-0 sm:border-r"
+            className="flex min-h-16 flex-col justify-center border-b border-white/30 px-4 py-3 even:border-l sm:min-h-20 sm:flex-1 sm:border-b-0 sm:border-l-0 sm:border-r sm:px-6 sm:even:border-l-0"
           >
-            <span className="text-lg font-medium">{field.label}</span>
-            <span className="mt-1 text-sm text-white/90">{field.value}</span>
+            <span className="text-sm font-medium sm:text-lg">
+              {field.label}
+            </span>
+            <span className="mt-1 text-xs text-white/90 sm:text-sm">
+              {field.value}
+            </span>
           </div>
         ))}
         <button
           type="button"
-          className="min-h-20 bg-[#18a4c4] px-12 text-lg font-semibold transition-colors hover:bg-[#118dab] sm:w-48 sm:shrink-0"
+          className="col-span-2 min-h-14 bg-[#18a4c4] px-8 text-base font-semibold transition-colors hover:bg-[#118dab] sm:col-span-1 sm:min-h-20 sm:w-48 sm:shrink-0 sm:text-lg"
         >
           Search
         </button>

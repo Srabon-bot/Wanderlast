@@ -53,9 +53,9 @@ export default async function DestinationDetailsPage({
         : "Unable to load this destination right now.";
 
     return (
-      <main className="bg-white px-6 pb-20 pt-32 text-[#090909] sm:px-10 lg:px-20 lg:pb-24 lg:pt-36">
+      <main className="bg-white px-4 pb-20 pt-32 text-[#090909] sm:px-6 sm:pt-36 md:px-10 lg:px-20 lg:pb-24 lg:pt-36">
         <div className="mx-auto max-w-7xl">
-          <h1 className="text-4xl font-light tracking-[-0.06em] sm:text-6xl">
+          <h1 className="text-3xl font-light tracking-[-0.06em] sm:text-5xl lg:text-6xl">
             Destination unavailable
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-[#6b6b6b]">{message}</p>

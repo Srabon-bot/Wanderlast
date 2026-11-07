@@ -23,10 +23,10 @@ const benefits = [
 
 export function WhyChooseWonderlast() {
   return (
-    <section className="bg-[#effcff] px-6 py-24 text-[#090909] sm:px-10 lg:px-20 lg:py-28">
+    <section className="bg-[#effcff] px-4 py-20 text-[#090909] sm:px-6 sm:py-24 md:px-10 lg:px-20 lg:py-28">
       <div className="mx-auto max-w-7xl">
         <div className="text-center">
-          <h2 className="text-4xl font-light tracking-[-0.06em] sm:text-5xl lg:text-6xl">
+          <h2 className="text-3xl font-light tracking-[-0.06em] sm:text-5xl lg:text-6xl">
             Why Choose Wonderlast
           </h2>
           <p className="mt-4 text-base text-[#6e6e6e] sm:text-lg">
@@ -38,7 +38,7 @@ export function WhyChooseWonderlast() {
           {benefits.map((benefit) => (
             <article
               key={benefit.title}
-              className="min-h-60 border border-white bg-white px-10 py-11 shadow-[0_1px_2px_rgba(0,0,0,0.08)]"
+              className="min-h-60 border border-white bg-white px-6 py-8 shadow-[0_1px_2px_rgba(0,0,0,0.08)] sm:px-10 sm:py-11"
             >
               <Image
                 src={benefit.icon}

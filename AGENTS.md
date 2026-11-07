@@ -13,7 +13,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - This repository is becoming a MERN CRUD travel site. Build the frontend first with Next.js, TypeScript, shadcn/Base UI, and Tailwind CSS v4; Better Auth and backend CRUD integration are planned for later slices.
 - Keep shared navigation in the root layout so every route can reuse it. Keep page-specific sections in reusable components under `src/components`.
 - Preserve the existing `@/*` aliases, shadcn configuration, semantic CSS variables, and Biome formatting/linting rules.
-- Use the travel assets in `public/assets` before introducing new image sources. Keep the current responsive-stacking approach for the first header slice; a mobile hamburger menu is not required yet.
+- Use the travel assets in `public/assets` before introducing new image sources. Keep shared navigation responsive with the desktop links and the mobile menu in `src/components/site-header.tsx`.
 - Read the matching guide in `node_modules/next/dist/docs/` before changing Next.js APIs or conventions.
 
 ## Current implementation state

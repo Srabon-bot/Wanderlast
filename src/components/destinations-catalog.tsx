@@ -123,7 +123,7 @@ export function DestinationsCatalog({
       </p>
 
       {visibleDestinations.length > 0 ? (
-        <div className="mt-10 grid gap-x-6 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-x-6 gap-y-10 sm:grid-cols-2 md:gap-y-12 lg:grid-cols-3">
           {visibleDestinations.map((destination, index) => (
             <DestinationCard
               key={getDestinationKey(destination, index)}
@@ -204,10 +204,10 @@ function DestinationCard({ destination }: { destination: Destination }) {
           {destination.country}
         </p>
         <div className="mt-2 flex items-baseline justify-between gap-4">
-          <h2 className="text-2xl leading-tight">
+          <h2 className="text-xl leading-tight sm:text-2xl">
             {destination.destinationName}
           </h2>
-          <p className="shrink-0 text-2xl">
+          <p className="shrink-0 text-xl sm:text-2xl">
             ${price.toLocaleString()}
             <span className="text-sm text-[#6b6b6b]">/Person</span>
           </p>

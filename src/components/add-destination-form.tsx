@@ -76,7 +76,7 @@ export function AddDestinationForm({ onSubmit }: AddDestinationFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mx-auto max-w-[800px] border border-[#ededed] bg-white px-10 py-10 shadow-[0_2px_8px_rgba(0,0,0,0.12)] sm:px-12 sm:py-11"
+      className="mx-auto max-w-[800px] border border-[#ededed] bg-white px-5 py-8 shadow-[0_2px_8px_rgba(0,0,0,0.12)] sm:px-10 sm:py-10 lg:px-12 lg:py-11"
     >
       <div>
         <Label

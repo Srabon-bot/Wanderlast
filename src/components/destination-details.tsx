@@ -215,9 +215,9 @@ export function DestinationDetails({
   }
 
   return (
-    <main className="bg-white px-6 pb-20 pt-32 text-[#090909] sm:px-10 lg:px-20 lg:pb-24 lg:pt-36">
+    <main className="bg-white px-4 pb-20 pt-32 text-[#090909] sm:px-6 sm:pt-36 md:px-10 lg:px-20 lg:pb-24 lg:pt-36">
       <div className="mx-auto max-w-7xl">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Button
             nativeButton={false}
             render={<Link href="/destinations/all-destinations" />}
@@ -228,12 +228,12 @@ export function DestinationDetails({
             Back to Destinations
           </Button>
 
-          <div className="flex gap-4">
+          <div className="flex gap-3 sm:gap-4">
             <Button
               type="button"
               variant="outline"
               size="lg"
-              className="h-auto border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b]"
+              className="h-auto flex-1 border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b] sm:flex-none"
               onClick={openEditDialog}
             >
               <Pencil className="size-5" strokeWidth={1.7} />
@@ -243,7 +243,7 @@ export function DestinationDetails({
               type="button"
               variant="outline"
               size="lg"
-              className="h-auto border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500"
+              className="h-auto flex-1 border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500 sm:flex-none"
               onClick={openDeleteDialog}
             >
               <Trash2 className="size-5" strokeWidth={1.7} />
@@ -270,7 +270,7 @@ export function DestinationDetails({
           onDelete={handleDelete}
         />
 
-        <div className="relative mt-8 aspect-[1.9] overflow-hidden bg-[#e8eeee]">
+        <div className="relative mt-8 aspect-[4/3] overflow-hidden bg-[#e8eeee] sm:aspect-[1.9]">
           <Image
             src={currentDestination.imageUrl}
             alt={`${currentDestination.destinationName} in ${currentDestination.country}`}
@@ -281,13 +281,13 @@ export function DestinationDetails({
           />
         </div>
 
-        <div className="mt-10 grid gap-12 border-t border-[#e5e5e5] pt-10 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-16">
+        <div className="mt-8 grid gap-10 border-t border-[#e5e5e5] pt-8 sm:mt-10 sm:gap-12 sm:pt-10 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-16">
           <div>
             <p className="flex items-center gap-2 text-lg text-[#6b6b6b]">
               <MapPin className="size-5" strokeWidth={1.7} />
               {currentDestination.country}
             </p>
-            <h1 className="mt-4 text-5xl font-light tracking-[-0.06em] sm:text-6xl">
+            <h1 className="mt-4 text-4xl font-light tracking-[-0.06em] sm:text-5xl lg:text-6xl">
               {currentDestination.destinationName}
             </h1>
 
@@ -630,8 +630,10 @@ function DetailSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-10">
-      <h2 className="text-3xl font-light tracking-[-0.04em]">{title}</h2>
+    <section className="mt-8 sm:mt-10">
+      <h2 className="text-2xl font-light tracking-[-0.04em] sm:text-3xl">
+        {title}
+      </h2>
       <div className="mt-5 text-lg leading-relaxed text-[#6b6b6b]">
         {children}
       </div>

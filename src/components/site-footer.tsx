@@ -3,8 +3,8 @@ import Link from "next/link";
 
 const quickLinks = [
   { label: "Home", href: "/" },
-  { label: "Destinations", href: "/destinations" },
-  { label: "My Bookings", href: "/bookings" },
+  { label: "Destinations", href: "/destinations/all-destinations" },
+  { label: "My Bookings", href: "/myBookings" },
   { label: "My Profile", href: "/profile" },
 ];
 
@@ -16,11 +16,11 @@ const supportLinks = [
 
 export function SiteFooter() {
   return (
-    <footer className="bg-[#0d0b0c] px-6 py-16 text-white sm:px-10 lg:px-20 lg:py-20">
+    <footer className="bg-[#0d0b0c] px-4 py-14 text-white sm:px-6 sm:py-16 md:px-10 lg:px-20 lg:py-20">
       <div className="mx-auto max-w-7xl">
         <div>
           <Link href="/" aria-label="Wonderlast home">
-            <span className="text-6xl font-semibold leading-none tracking-[-0.06em] text-white sm:text-7xl lg:text-[6.5rem]">
+            <span className="text-5xl font-semibold leading-none tracking-[-0.06em] text-white sm:text-7xl lg:text-[6.5rem]">
               Wonderlast
             </span>
           </Link>
@@ -63,10 +63,10 @@ export function SiteFooter() {
             <div className="mt-5 space-y-4 text-base text-white/70">
               <p>786 901 1622</p>
               <a
-                href="mailto:info@wandarland.com"
+                href="mailto:info@wonderlast.com"
                 className="block transition-colors hover:text-white"
               >
-                info@wandarland.com
+                info@wonderlast.com
               </a>
             </div>
           </div>
