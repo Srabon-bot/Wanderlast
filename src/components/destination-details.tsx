@@ -49,6 +49,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { authClient } from "@/lib/auth-client";
 
 const defaultHighlights = [
   "Luxury accommodation",
@@ -650,9 +651,48 @@ function BookingCard({
   );
   const [message, setMessage] = React.useState("");
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setMessage("Your booking details are ready for the next step.");
+
+    const { _id, ...destinationData } = destination;
+
+    const data = {
+      userId: user?.id,
+      userEmail: user?.email,
+      userName: user?.name,
+      userImage: user?.image,
+      destinationId: _id,
+      ...destinationData,
+
+      departureDate,
+      price,
+      bookingDate: new Date().toISOString(),
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        console.error(`Booking failed (${response.status}):`, text);
+        setMessage("Booking failed. Please try again.");
+        return;
+      }
+
+      const result = await response.json();
+      console.log("Booking added successfully:", result);
+      setMessage("Booking successful! Your booking is pending confirmation.");
+    } catch (error) {
+      console.error("Error adding booking:", error);
+      setMessage("Booking failed. Please try again.");
+    }
   }
 
   return (
@@ -668,6 +708,7 @@ function BookingCard({
         <Input
           id="departure-date"
           type="date"
+          name="departureDate"
           value={departureDate}
           onChange={(event) => {
             setDepartureDate(event.target.value);

@@ -220,7 +220,7 @@ function DestinationCard({ destination }: { destination: Destination }) {
           href={`/destinations/${destination.slug ?? getDestinationKey(destination, 0)}`}
           className="mt-5 inline-flex items-center gap-3 text-base uppercase text-[#18a4c4] underline decoration-1 underline-offset-4 transition-colors hover:text-[#118dab]"
         >
-          Book now
+          See Details
           <ArrowUpRight className="size-5" strokeWidth={1.7} />
         </Link>
       </div>
