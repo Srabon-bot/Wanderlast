@@ -19,9 +19,8 @@ import { Button } from "./ui/button";
 const navigation = [
   { label: "Home", href: "/" },
   { label: "Destinations", href: "/destinations/all-destinations" },
-  { label: "Add Destination", href: "/destinations/new" },
   { label: "My Bookings", href: "/myBookings" },
-  { label: "Admin", href: "/admin" },
+  { label: "Admin", href: "/destinations/new" },
 ];
 
 export function SiteHeader() {
