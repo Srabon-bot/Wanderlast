@@ -67,11 +67,18 @@ export function DestinationDetails({
 }) {
   const highlights = defaultHighlights;
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
   const [currentDestination, setCurrentDestination] =
     React.useState(destination);
   const rating = currentDestination.rating ?? 4.5;
   const price = currentDestination.price ?? 0;
   const reviews = 234;
+  const isOwner = Boolean(
+    user?.id &&
+      currentDestination.ownerId &&
+      user.id === currentDestination.ownerId,
+  );
   const [editOpen, setEditOpen] = React.useState(false);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [isSaving, setIsSaving] = React.useState(false);
@@ -140,7 +147,10 @@ export function DestinationDetails({
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          userId: user?.id ?? "",
+        }),
       });
 
       if (!response.ok) {
@@ -185,7 +195,9 @@ export function DestinationDetails({
         method: "DELETE",
         headers: {
           Accept: "application/json",
+          "Content-Type": "application/json",
         },
+        body: JSON.stringify({ userId: user?.id ?? "" }),
       });
 
       if (!response.ok) {
@@ -223,28 +235,30 @@ export function DestinationDetails({
             Back to Destinations
           </Button>
 
-          <div className="flex gap-3 sm:gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="h-auto flex-1 border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b] sm:flex-none"
-              onClick={openEditDialog}
-            >
-              <Pencil className="size-5" strokeWidth={1.7} />
-              Edit
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="h-auto flex-1 border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500 sm:flex-none"
-              onClick={openDeleteDialog}
-            >
-              <Trash2 className="size-5" strokeWidth={1.7} />
-              Delete
-            </Button>
-          </div>
+          {isOwner ? (
+            <div className="flex gap-3 sm:gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="h-auto flex-1 border-[#bdbdbd] px-6 py-3 text-base font-normal text-[#6b6b6b] sm:flex-none"
+                onClick={openEditDialog}
+              >
+                <Pencil className="size-5" strokeWidth={1.7} />
+                Edit
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="h-auto flex-1 border-red-400 px-6 py-3 text-base font-normal text-red-500 hover:bg-red-50 hover:text-red-500 sm:flex-none"
+                onClick={openDeleteDialog}
+              >
+                <Trash2 className="size-5" strokeWidth={1.7} />
+                Delete
+              </Button>
+            </div>
+          ) : null}
         </div>
 
         <EditDestinationDialog

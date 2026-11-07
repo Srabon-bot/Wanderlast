@@ -24,6 +24,10 @@ export type Destination = {
   imageUrl: string;
   description?: string;
   rating?: number;
+  ownerId?: string;
+  ownerName?: string;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 type DestinationsCatalogProps = {
