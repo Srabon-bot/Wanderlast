@@ -14,6 +14,7 @@ async function getDestination(identifier: string): Promise<Destination | null> {
 
   const response = await fetch(apiUrl(endpoint), {
     headers: {
+      authorization: "user logged in",
       Accept: "application/json",
     },
     cache: "no-store",
